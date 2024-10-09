@@ -14,6 +14,7 @@ set(EXAMPLES nfsclient-async
             nfs-writefile
 	    nfs-nfsstat
 	    nfs-stats-cb
+            latency-bench
             portmap-client)
 
 if (ENABLE_MULTITHREADING)
@@ -35,6 +36,7 @@ if(EVENT_LIBARY)
 endif()
 
 include_directories(../mount
+  ../include/nfsc
   ../nfs
   ../nfs4
   ../portmap
