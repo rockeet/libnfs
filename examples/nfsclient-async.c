@@ -1,16 +1,16 @@
-/* 
+/*
    Copyright (C) by Ronnie Sahlberg <ronniesahlberg@gmail.com> 2010
-   
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 3 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, see <http://www.gnu.org/licenses/>.
 */
@@ -28,7 +28,7 @@ WSADATA wsaData;
 #else
 #include <sys/stat.h>
 #endif
- 
+
 #ifdef HAVE_POLL_H
 #include <poll.h>
 #endif
@@ -47,6 +47,7 @@ WSADATA wsaData;
 #include <stdint.h>
 #include <sys/types.h>
 #include <fcntl.h>
+#include <poll.h>
 #include "libnfs.h"
 #include "libnfs-raw.h"
 #include "libnfs-raw-mount.h"
@@ -129,7 +130,7 @@ void nfs_fstat64_cb(int status, struct nfs_context *nfs, void *data, void *priva
 {
 	struct client *client = private_data;
 	struct nfs_stat_64 *st;
- 
+
 	if (status < 0) {
 		printf("fstat call failed with \"%s\"\n", (char *)data);
 		exit(10);
@@ -196,7 +197,7 @@ void nfs_stat64_cb(int status, struct nfs_context *nfs, void *data, void *privat
 {
 	struct client *client = private_data;
 	struct nfs_stat_64 *st;
- 
+
 	if (status < 0) {
 		printf("stat call failed with \"%s\"\n", (char *)data);
 		exit(10);
@@ -234,7 +235,7 @@ void nfs_mount_cb(int status, struct nfs_context *nfs, void *data, void *private
 
 
 
-int main(int argc _U_, char *argv[] _U_)
+int main(int argc, char *argv[])
 {
 	struct nfs_context *nfs;
 	int ret;
@@ -294,7 +295,7 @@ int main(int argc _U_, char *argv[] _U_)
 			break;
 		}
 	}
-	
+
 	nfs_destroy_context(nfs);
 	if (mount_context != NULL) {
 		rpc_destroy_context(mount_context);
