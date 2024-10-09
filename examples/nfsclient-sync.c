@@ -1,16 +1,16 @@
-/* 
+/*
    Copyright (C) by Ronnie Sahlberg <ronniesahlberg@gmail.com> 2010
-   
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 3 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, see <http://www.gnu.org/licenses/>.
 */
@@ -27,7 +27,7 @@
 #ifdef AROS
 #include "aros_compat.h"
 #endif
- 
+
 #ifdef WIN32
 #include <win32/win32_compat.h>
 #pragma comment(lib, "ws2_32.lib")
@@ -56,16 +56,6 @@ WSADATA wsaData;
 #include "libnfs-raw.h"
 #include "libnfs-raw-mount.h"
 
-struct client {
-       char *server;
-       char *export;
-       uint32_t mount_port;
-       int is_finished;
-};
-
-
-char buf[3*1024*1024+337];
-
 void print_usage(void)
 {
 	fprintf(stderr, "Usage: nfsclient-sync [-?|--help] [--usage] <url>\n");
@@ -75,12 +65,12 @@ int main(int argc, char *argv[])
 {
 	struct nfs_context *nfs = NULL;
 	int ret;
-	struct client client;
 	struct nfs_stat_64 st;
 	struct nfsdir *nfsdir;
 	struct nfsdirent *nfsdirent;
 	const char *url = NULL;
 	char *server = NULL, *path = NULL, *strp;
+	char *export = NULL;
 
 #ifdef WIN32
 	if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0) {
@@ -137,11 +127,12 @@ int main(int argc, char *argv[])
 		exit(10);
 	}
 	*strp = 0;
-	
-	client.server = server;
-	client.export = path;
-	client.is_finished = 0;
 
+	export = path;
+
+    printf("server: %s\n", server);
+    printf("export: %s\n", export);
+    printf("path  : %s\n", path);
 
 	nfs = nfs_init_context();
 	if (nfs == NULL) {
@@ -149,7 +140,7 @@ int main(int argc, char *argv[])
 		goto finished;
 	}
 
-	ret = nfs_mount(nfs, client.server, client.export);
+	ret = nfs_mount(nfs, server, export);
 	if (ret != 0) {
  		printf("Failed to mount nfs share : %s\n", nfs_get_error(nfs));
 		goto finished;
@@ -220,7 +211,7 @@ int main(int argc, char *argv[])
 finished:
 	free(server);
 	free(path);
-	if (nfs != NULL) {		
+	if (nfs != NULL) {
 		nfs_destroy_context(nfs);
 	}
 	return 0;
