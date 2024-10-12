@@ -15,14 +15,15 @@ set(EXAMPLES nfsclient-async
 	    nfs-nfsstat
 	    nfs-stats-cb
             latency-bench
+            tailing-latency
             portmap-client)
 
 if (ENABLE_MULTITHREADING)
   list(APPEND EXAMPLES nfs-pthreads-writefile
                        nfs-pthreads-async-writefile
                        nfs-pthreads-async-readfile)
-  list(APPEND EXTRA_LIBRARIES pthread)
 endif()
+list(APPEND EXTRA_LIBRARIES pthread)
 
 if(HAVE_TALLOC_TEVENT)
   list(APPEND EXAMPLES nfs4-cat-talloc)
